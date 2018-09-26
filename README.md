@@ -1,5 +1,13 @@
 ## RabbitMQ简单介绍:
 RabbitMQ是一个开源的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间传递数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于AMQP协议的。
+## 学习记录
+1. [RabbitMQ安装与配置](https://github.com/suxiongwei/suxiongwei.github.io/blob/master/article/other/rabbitmq_install.md)
+2. [RabbitMQ：消息发送确认与消息接收确认（ACK）](https://www.jianshu.com/p/2c5eebfd0e95)
+3. [消息中间件选型分析——从Kafka与RabbitMQ的对比来看全局](http://blog.didispace.com/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%80%89%E5%9E%8B%E5%88%86%E6%9E%90/)
+4. [RabbitMQ必备核心知识](http://www.imooc.com/article/75201)
+5. [Spring Boot 实现 RabbitMQ 延迟消费和延迟重试队列](https://www.cnblogs.com/xishuai/p/spring-boot-rabbitmq-delay-queue.html)
+
+
 ## 特点：
 1. RabbitMQ底层使用Erlang语言编写，传递效率高，延迟低
 2. 开源、性能优秀、稳定性较高
@@ -8,58 +16,6 @@ RabbitMQ是一个开源的消息代理和队列服务器，用来通过普通协
 5. 保证数据不丢失的情况下，做到高可用
 6. AMQP全称：Advanced Message Queuing Protocol
 7. AMQP翻译:高级消息队列协议
-## RabbitMQ安装与配置
-### 安装RabbitMQ需先安装erlang和socat
-1. 安装依赖环境
-```
-yum install build-essential openssl openssl-devel unixODBC unixODBC-devel make gcc gcc-c++ kernel-devel m4 ncurses-devel
-```
-2. 下载软件包及其依赖包：
-```
-wget www.rabbitmq.com/releases/erlang/erlang-18.3-1.el7.centos.x86_64.rpm
-wget http://repo.iotti.biz/CentOS/7/x86_64/socat-1.7.3.2-5.el7.lux.x86_64.rpm
-wget www.rabbitmq.com/releases/rabbitmq-server/v3.6.5/rabbitmq-server-3.6.5-1.noarch.rpm
-```
-3. 执行安装
-```
-依次执行
-rpm -ivh erlang-18.3-1.el7.centos.x86_64.rpm
-rpm -ivh socat-1.7.3.2-5.el7.lux.x86_64.rpm
-rpm -ivh rabbitmq-server-3.6.5-1.noarch.rpm
-```
-4. 配置
-```
-vim /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.5/ebin/rabbit.app
-```
-loopback_users 中的 <<"guest">>,只保留guest
-5. 服务启动和停止：
-```
-启动 rabbitmq-server start &
-停止 rabbitmqctl app_stop
-```
-6. 验证是否启动成功
-```
-lsof -i:5672
-```
-7. 插件管理
-
-查看插件列表
-```
-rabbitmq-plugins list
-```
-启动management插件
-```
-rabbitmq-plugins enable rabbitmq_management
-```
-8. 至此已经安装配置完成，访问管控台查看信息
-```
-http://YourIp:15672/
-```
-> 如果无法访问，可能是防火墙的问题，可以关闭防火墙试试
-
-```
-service firewalld stop  
-```
 
 ## AMQP核心概念
 - Server：又称Broker，接收客户端的连接，实现AMQP实体服务
@@ -195,7 +151,4 @@ MQ比较适合
 消息的关注者不止一个 <br/>
 在一个由多个微服务构成的大系统中，会有一些非关键服务，用来执行一些不需要立刻得到结果的计算。而且它们的计算结果并不会返回给消息的发送者。这个时候就应该使用MQ。
 
-## 相关文档资料
-### [RabbitMQ：消息发送确认与消息接收确认（ACK）](https://www.jianshu.com/p/2c5eebfd0e95)
-### [消息中间件选型分析——从Kafka与RabbitMQ的对比来看全局](http://blog.didispace.com/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%80%89%E5%9E%8B%E5%88%86%E6%9E%90/)
-### [RabbitMQ必备核心知识](http://www.imooc.com/article/75201)
+
