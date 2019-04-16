@@ -7,7 +7,8 @@ RabbitMQ是一个开源的消息代理和队列服务器，用来通过普通协
 4. [RabbitMQ必备核心知识](http://www.imooc.com/article/75201)
 5. [Spring Boot 实现 RabbitMQ 延迟消费和延迟重试队列](https://www.cnblogs.com/xishuai/p/spring-boot-rabbitmq-delay-queue.html)
 6. [IM系统的MQ消息中间件选型：Kafka还是RabbitMQ？](https://zhuanlan.zhihu.com/p/37993013)
-
+7.[（转载）如何保证消息队列的高可用？](https://github.com/doocs/advanced-java/blob/master/docs/high-concurrency/how-to-ensure-high-availability-of-message-queues.md)
+8.[（转载）为什么使用消息队列？消息队列有什么优点和缺点？Kafka、ActiveMQ、RabbitMQ、RocketMQ 都有什么优点和缺点？](https://github.com/doocs/advanced-java/blob/master/docs/high-concurrency/why-mq.md)
 
 ## 特点：
 1. RabbitMQ底层使用Erlang语言编写，传递效率高，延迟低
