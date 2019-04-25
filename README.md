@@ -1,5 +1,8 @@
 ## RabbitMQ简单介绍:
 RabbitMQ是一个开源的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间传递数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于AMQP协议的。
+
+> springboot 与 kafka的整合请参考我的另一个项目[springboot-kafka](https://github.com/suxiongwei/springboot-kafka)
+
 ## 学习记录
 1. [RabbitMQ安装与配置](https://github.com/suxiongwei/suxiongwei.github.io/blob/master/article/other/rabbitmq_install.md)
 2. [RabbitMQ：消息发送确认与消息接收确认（ACK）](https://www.jianshu.com/p/2c5eebfd0e95)
