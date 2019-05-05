@@ -12,6 +12,7 @@
         <module>springboot-consumer</module>
         <module>springboot-producer</module>
         <module>springboot-model</module>
+        <module>rabbitmqdomo</module>
     </modules>
 
     <parent>
