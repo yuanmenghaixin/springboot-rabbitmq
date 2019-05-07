@@ -1,9 +1,6 @@
 package char1;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import com.rabbitmq.client.*;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -20,6 +17,7 @@ public class RabbitProducer {
     private static final int PORT = 5672;//RabbitMQ 服务端默认端口号为5672
 
     public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
+        //TODO 版本不一致，记得关闭Activemq
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(IP_ADDRESS);
         factory.setPort(PORT);
@@ -35,8 +33,16 @@ public class RabbitProducer {
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
         //发送一条持久化的消息: hello world !
         String message = "Hello World !";
-        channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
+        channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, true,MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
+        channel.addReturnListener(new ReturnListener() {
+            @Override
+            public void handleReturn(int replyCode, String replyText, String exchange, String routingKey, AMQP.BasicProperties basicProperties, byte[] body) throws IOException {
+                String message = new String(body);
+                System.out.println("B asic.Return 返回的结果是: " + message);
+            }
+        });
         //关闭资源
+        Thread.sleep(5000);
         channel.close();
         connection.close();
     }
