@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by Peng.lv on 2019/4/30.
+ * Created by Tim on 2019/4/30.
  * 配置的参数要和RabbitMQ管理界面配置的一样，否则报错
  */
 public class RabbitProducer_DL {
@@ -47,7 +47,14 @@ public class RabbitProducer_DL {
         channel.queueBind(QUEUE_NAME_DL, EXCHANGE_NAME_DL, ROUTING_KEY_DL);
         //发送一条持久化的消息: hello world !
         String message = "Hello World !";
-        channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, true, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
+        try {
+            channel.txSelect();//用于将当前的信道设置成事务模式
+            channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, true, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
+            channel.txCommit();//用于提交事务
+        } catch (Exception e) {
+            e.printStackTrace();
+            channel.txRollback();
+        }
         channel.addReturnListener(new ReturnListener() {
             @Override
             public void handleReturn(int replyCode, String replyText, String exchange, String routingKey, AMQP.BasicProperties basicProperties, byte[] body) throws IOException {
