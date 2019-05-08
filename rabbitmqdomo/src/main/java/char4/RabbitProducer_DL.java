@@ -1,4 +1,4 @@
-package char1;
+package char4;
 
 import com.rabbitmq.client.*;
 
@@ -8,12 +8,16 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
- * exchange,channel和queue配置的参数要和RabbitMQ管理界面配置的一样，否则报错
+ * Created by Peng.lv on 2019/4/30.
+ * 配置的参数要和RabbitMQ管理界面配置的一样，否则报错
  */
-public class RabbitProducer {
-    private static final String EXCHANGE_NAME = "exchange_demo";
-    private static final String ROUTING_KEY = "routingkey_demo";
-    private static final String QUEUE_NAME = "queue_demo";
+public class RabbitProducer_DL {
+    private static final String EXCHANGE_NAME = "exchange_normal";
+    private static final String ROUTING_KEY = "key_normal";
+    private static final String QUEUE_NAME = "queue_normal";
+    private static final String EXCHANGE_NAME_DL = "exchange_dl";
+    private static final String ROUTING_KEY_DL = "key_dl";
+    private static final String QUEUE_NAME_DL = "queue_dl";
     private static final String IP_ADDRESS = "127.0.0.1";
     private static final int PORT = 5672;//RabbitMQ 服务端默认端口号为5672
 
@@ -28,22 +32,22 @@ public class RabbitProducer {
         Channel channel = connection.createChannel();//创建信道
         // 创建一个type="direct" 、持久化的、非自动删除的交换器
         channel.exchangeDeclare(EXCHANGE_NAME, "direct", true, false, null);
+        channel.exchangeDeclare(EXCHANGE_NAME_DL, "direct", true, false, null);
+
         //创建一个持久化、非排他的、非自动删除的队列
         Map<String, Object> arguments = new HashMap<String, Object>();
-        //arguments.put("x-message-ttl", 10000);
+        arguments.put("x-message-ttl", 10000);
         arguments.put("x-dead-letter-exchange", "exchange_dl");
-        //arguments.put("x-dead-letter-routing-key", " key_dl");
-        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        arguments.put("x-dead-letter-routing-key", "key_dl");
+        channel.queueDeclare(QUEUE_NAME, true, false, false, arguments);
         //将交换器与队列通过路由键绑定
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
+        channel.queueDeclare(QUEUE_NAME_DL, true, false, false, null);
+        //将交换器与队列通过路由键绑定
+        channel.queueBind(QUEUE_NAME_DL, EXCHANGE_NAME_DL, ROUTING_KEY_DL);
         //发送一条持久化的消息: hello world !
         String message = "Hello World !";
-        AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
-        builder.deliveryMode(2); // 持久化消息
-        builder.expiration("10000");//设置TTL=60000ms
-        AMQP.BasicProperties properties = builder.build();
-        //channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, true, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
-        channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, true, properties, message.getBytes());
+        channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, true, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
         channel.addReturnListener(new ReturnListener() {
             @Override
             public void handleReturn(int replyCode, String replyText, String exchange, String routingKey, AMQP.BasicProperties basicProperties, byte[] body) throws IOException {
